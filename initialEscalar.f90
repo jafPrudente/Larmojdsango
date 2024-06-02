@@ -36,7 +36,7 @@ subroutine initialEscalar
    write(*,*) 's : ', a(Nr)*alpha(Nr)
 
    ! Guardamos en un archivo.
-   open(ward, file = 'sol.dat')
+   open(ward, file = './' // trim(dirname) // '/sol.dat')
 
    do j=2, Nr, savedataR
       write(ward, "(4(F11.8,','))") r(j), a(j), alpha(j), phi(j)

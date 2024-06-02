@@ -22,7 +22,7 @@ subroutine initialDirac
    !------------------------------------------------
    ! Apicamos el shooting.
    write(*,*) 'Iniciamos el shooting...'
-   call solucionadorDirac
+   call shootingDirac
 
    !------------------------------------------------
    ! Regresamos el reescalamiento.
@@ -32,10 +32,10 @@ subroutine initialDirac
    ! Imprimimos variables de interés.
    write(*,*) 'w : ', w
    write(*,*) 'wt: ', w*s0
-   write(*,*) 'm : ', m(Nr)
+   write(*,*) 's : ', s(Nr)*s0
 
    ! Guardamos en un archivo.
-   open(ward, file = 'sol.dat')
+   open(ward, file = './' // trim(dirname) // '/sol.dat')
 
    do j=2, Nr, savedataR
       write(ward, "(5(F11.8,','))") r(j), m(j), s(j), F(j), G(j)

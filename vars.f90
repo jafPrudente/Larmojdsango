@@ -19,6 +19,10 @@ module vars
    real(8) sexto, cuarto, tercio, medio
    real(8) uno, dos, tres, cuatro, cero
 
+   character(len=10) dirname
+   character(len=10) char_campoEntero, char_campoDecimal
+   integer campoEntero
+
 contains
 
    subroutine lector
@@ -102,6 +106,22 @@ contains
 
       dr = (rmax)/dble(Nr)
       dt = courant*dr
+
+      !------------------------------------------------
+      ! Creamos la carpeta que guardará la información.
+      write(char_campoDecimal, '(F0.3)') campo0
+
+      campoEntero = nint(campo0)
+      write(char_campoEntero, '(I1)') campoEntero
+
+      if (campoEntero == 0) then
+         dirname = trim( trim(char_campoEntero) // trim(char_campoDecimal) )
+      elseif (campoEntero > 0) then
+         dirname = trim( char_campoDecimal )
+      end if
+
+      call execute_command_line ('mkdir -p ' // trim(dirname) )
+      call execute_command_line ('cp ./input.par ' // './' // trim(dirname) // '/input.par')
 
    end subroutine
 

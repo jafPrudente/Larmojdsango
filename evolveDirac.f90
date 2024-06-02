@@ -41,6 +41,7 @@ subroutine evolveDirac
 
    !------------------------------------------------
    ! Imprimimos información inicial a pantalla.
+   write(*,*) 'Comenzamos a evolucionar...'
    print *,'----------------------------'
    print *,'|  Iteracion  | Tiempo Fis |'
    print *,'----------------------------'
@@ -51,27 +52,27 @@ subroutine evolveDirac
    ! Guardamos información al tiempo cero.
 
    ! Abrimos los archivos.
-   open(10, file = 'F1.rt')
-   open(11, file = 'F2.rt')
-   open(12, file = 'F.rt')
-   open(13, file = 'F1.t')
-   open(14, file = 'F2.t')
-   open(78, file = 'frec.t')
+   open(10, file = './' // trim(dirname) // '/F1.rt')
+   open(11, file = './' // trim(dirname) // '/F2.rt')
+   open(12, file = './' // trim(dirname) // '/F.rt')
+   open(13, file = './' // trim(dirname) // '/F1.t')
+   open(14, file = './' // trim(dirname) // '/F2.t')
+   open(78, file = './' // trim(dirname) // '/frec.t')
 
-   open(20, file = 'G1.rt')
-   open(21, file = 'G2.rt')
-   open(22, file = 'G.rt')
-   open(23, file = 'G1.t')
-   open(24, file = 'G2.t')
+   open(20, file = './' // trim(dirname) // '/G1.rt')
+   open(21, file = './' // trim(dirname) // '/G2.rt')
+   open(22, file = './' // trim(dirname) // '/G.rt')
+   open(23, file = './' // trim(dirname) // '/G1.t')
+   open(24, file = './' // trim(dirname) // '/G2.t')
 
-   open(30, file = 'a.rt')
-   open(31, file = 'alpha.rt')
-   open(32, file = 'metric.rt')
-   open(33, file = 'adot.rt')
-   open(35, file = 'error.t')
+   open(30, file = './' // trim(dirname) // '/a.rt')
+   open(31, file = './' // trim(dirname) // '/alpha.rt')
+   open(32, file = './' // trim(dirname) // '/metric.rt')
+   open(33, file = './' // trim(dirname) // '/adot.rt')
+   open(35, file = './' // trim(dirname) // '/error.t')
 
-   open(40, file = 'masa.rt')
-   open(41, file = 'masa.t')
+   open(40, file = './' // trim(dirname) // '/masa.rt')
+   open(41, file = './' // trim(dirname) // '/masa.t')
 
    ! Escribimos la información en sí.
    call wardaditoStatic
@@ -196,6 +197,7 @@ subroutine evolveDirac
       !================================================
       ! Finaliza el ciclo principal de evolución.
    end do
+   write(*,*) 'Hemos terminado, Camarada UwUr'
 
    !------------------------------------------------
    ! Cerramos las puertas que abrimos.

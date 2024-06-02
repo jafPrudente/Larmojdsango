@@ -25,11 +25,17 @@ subroutine initialProca
    call shootingProca
 
    !------------------------------------------------
-   ! Regresamos la segunda adimención.
+   ! Regresamos el reescalamiento.
    s0 = 1/s(Nr)
 
+   !------------------------------------------------
+   ! Imprimimos variables de interés.
+   write(*,*) 'w : ', w
+   write(*,*) 'wt: ', w*s0
+   write(*,*) 's : ', s(Nr)*s0
+
    ! Guardamos en un archivo.
-   open(ward, file = 'sol.dat')
+   open(ward, file = './' // trim(dirname) // '/sol.dat')
 
    do j=2, Nr, savedataR
       write(ward, "(5(F11.8,','))") r(j), m(j), s(j), F(j), G(j)

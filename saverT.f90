@@ -22,6 +22,8 @@ subroutine wardaditoStatic
       write(14,"(3ES16.8)") t, phi2(2)
       write(24,"(3ES16.8)") t, maxval( abs(adot) )
 
+      write(31,"(2ES16.8)") t, (rmax/dos)*( uno - (uno/a(Nr)**2) )
+
 
       !===================================================
    else if( matterType == 2 ) then

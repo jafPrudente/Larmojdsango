@@ -29,6 +29,8 @@ subroutine wardaditoDinamic
          write(21,"(3ES16.8)") t, r(j), alpha(j)
          write(22,"(3ES16.8)") t, r(j), a(j)*alpha(j)
          write(23,"(3ES16.8)") t, r(j), adot(j)
+
+         write(30,"(3ES16.8)") t, r(j), (r(j)/dos)*( uno - (uno/a(j)**2) )
       end do
 
       ! Dejamos dos espacios para las gráficas de gnuplot.
@@ -47,6 +49,9 @@ subroutine wardaditoDinamic
       write(22,*)
       write(23,*)
       write(23,*)
+
+      write(30,*)
+      write(30,*)
 
 
       !===================================================

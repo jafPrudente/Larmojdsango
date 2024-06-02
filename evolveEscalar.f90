@@ -45,6 +45,7 @@ subroutine evolveEscalar
 
    !------------------------------------------------
    ! Imprimimos información inicial a pantalla.
+   write(*,*) 'Comenzamos a evolucionar...'
    print *,'----------------------------'
    print *,'|  Iteracion  | Tiempo Fis |'
    print *,'----------------------------'
@@ -55,17 +56,20 @@ subroutine evolveEscalar
    ! Guardamos información al tiempo cero.
 
    ! Abrimos los archivos.
-   open(10, file = 'phi1.rt')
-   open(11, file = 'phi2.rt')
-   open(12, file = 'phi.rt')
-   open(13, file = 'phi1.t')
-   open(14, file = 'phi2.t')
+   open(10, file = './' // trim(dirname) // '/phi1.rt')
+   open(11, file = './' // trim(dirname) // '/phi2.rt')
+   open(12, file = './' // trim(dirname) // '/phi.rt')
+   open(13, file = './' // trim(dirname) // '/phi1.t')
+   open(14, file = './' // trim(dirname) // '/phi2.t')
 
-   open(20, file = 'a.rt')
-   open(21, file = 'alpha.rt')
-   open(22, file = 'metric.rt')
-   open(23, file = 'adot.rt')
-   open(24, file = 'error.t')
+   open(20, file = './' // trim(dirname) // '/a.rt')
+   open(21, file = './' // trim(dirname) // '/alpha.rt')
+   open(22, file = './' // trim(dirname) // '/metric.rt')
+   open(23, file = './' // trim(dirname) // '/adot.rt')
+   open(24, file = './' // trim(dirname) // '/error.t')
+
+   open(30, file = './' // trim(dirname) // '/masa.rt')
+   open(31, file = './' // trim(dirname) // '/masa.t')
 
    ! Escribimos la información en sí.
    call wardaditoStatic
@@ -187,6 +191,7 @@ subroutine evolveEscalar
       !================================================
       ! Finaliza el ciclo principal de evolución.
    end do
+   write(*,*) 'Hemos terminado, Camarada UwUr'
 
    !------------------------------------------------
    ! Cerramos las puertas que abrimos.

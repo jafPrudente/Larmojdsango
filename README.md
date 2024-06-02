@@ -9,5 +9,5 @@ El proceso de acople se puede ver en los siguientes artículos:
 Para ocupar este progrma es necesario lo siguiente:
 1. El archivo \'input.par\' guarda los parámetros de entrada, cada línea tiene especificada la variable. La variable \'campo0\' se refiere a uno de los parámetros libres del shootng, mientras que \'w\' se refiere al otro.
 2. Una vez definido el parámetro de entrada se ejecuta la orden `make` sobre la carpeta raíz de este proyecto. Esto generará una carpeta llamada \'data\'.
-3. En la carpeta \'data\' se encontrará una copia del archivo de parámetros \'input.par\' y un ejecutable llamado \'estrella\', se ejecuta este último con `./estrella` estando en la carpeta \'data\'.
+3. En la carpeta \'data\' se encontrará una copia del archivo de parámetros \'input.par\' y un ejecutable llamado \'estrella\', se ejecuta este último con `./estrella` estando en la carpeta \'data\'. Al ejecutar `estrella` se creará una carpeta con el valor inicial del campo y dentro estará la información calculada, además de una copia del \'input.par\', de este modo se puede modificar el archivo \'input.par\' de la carpeta \'data\' y en esta misma se puede volver a ejecutar `estrella` para tener distintas soluciones sin necesidad de compilar cada vez.
 4. Una vez terminado el proceso de ejecución se pueden graficar los distintos archivos generados.
