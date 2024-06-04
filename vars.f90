@@ -111,7 +111,7 @@ contains
       ! Creamos la carpeta que guardará la información.
       write(char_campoDecimal, '(F0.3)') campo0
 
-      campoEntero = nint(campo0)
+      campoEntero = int(campo0)
       write(char_campoEntero, '(I1)') campoEntero
 
       if (campoEntero == 0) then
