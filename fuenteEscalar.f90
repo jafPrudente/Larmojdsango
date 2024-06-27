@@ -15,26 +15,50 @@ subroutine fuenteEscalar
 
    !------------------------------------------------
    ! Declaramos variables útiles.
-   integer j
-
-   ! Definimos el rhs para \phi, son las ecs (9) de Argelia/Siddhartha.
-   do j=1, Nr
-      phi1_f(j) = ( alpha(j)/a(j) )*pi1(j)
-      phi2_f(j) = ( alpha(j)/a(j) )*pi2(j)
-   end do
-
-   ! Definimos el rhs para las \psi, son las ecs (9) de Argelia/Siddhartha.
-   do j=2, Nr-1
-      psi1_f(j) = ( (alpha(j+1)/a(j+1))*pi1(j+1) - (alpha(j-1)/a(j-1))*pi1(j-1) )/(dos*dr)
-      psi2_f(j) = ( (alpha(j+1)/a(j+1))*pi2(j+1) - (alpha(j-1)/a(j-1))*pi2(j-1) )/(dos*dr)
-
-      pi1_f(j) = (uno/r(j)**2)*( r(j+1)**2*(alpha(j+1)/a(j+1))*psi1(j+1) &
-         - r(j-1)**2*(alpha(j-1)/a(j-1))*psi1(j-1) )/(dos*dr) &
-         -a(j)*alpha(j)*phi1(j)
-
-      pi2_f(j) = (uno/r(j)**2)*( r(j+1)**2*(alpha(j+1)/a(j+1))*psi2(j+1) &
-         - r(j-1)**2*(alpha(j-1)/a(j-1))*psi2(j-1) )/(dos*dr) &
-         -a(j)*alpha(j)*phi2(j)
-   end do
-
+   integer i
+   real(8) idrh
+   idrh = medio/dr
+   
+   !------------------------------------------------
+   ! Llenamos las fuentes de phi.
+     do i=1, Nr
+        phi1_f(i) = alpha(i)*pi1(i)/a(i)
+        phi2_f(i) = alpha(i)*pi2(i)/a(i)
+     end do
+   
+   !------------------------------------------------
+   ! Llenamos las fuentes de psi.
+     do i=2, Nr-1
+        psi1_f(i) = idrh*(alpha(i+1)*pi1(i+1)/a(i+1) &
+                - alpha(i-1)*pi1(i-1)/a(i-1))
+        psi2_f(i) = idrh*(alpha(i+1)*pi2(i+1)/a(i+1) &
+                - alpha(i-1)*pi2(i-1)/a(i-1))
+     end do
+   
+   !------------------------------------------------
+   ! Llenamos las fuentes de pi.
+     do i=2, 10
+        pi1_f(i) = 3.0D0*((alpha(i+1)*r(i+1)**2*psi1(i+1)/a(i+1) &
+               - alpha(i-1)*r(i-1)**2*psi1(i-1)/a(i-1)) &
+               /(r(i+1)**3 - r(i-1)**3)) &
+               - a(i)*alpha(i)*phi1(i)
+   
+        pi2_f(i) = 3.0D0*((alpha(i+1)*r(i+1)**2*psi2(i+1)/a(i+1) &
+               - alpha(i-1)*r(i-1)**2*psi2(i-1)/a(i-1)) &
+               /(r(i+1)**3 - r(i-1)**3)) &
+               - a(i)*alpha(i)*phi2(i)
+     end do
+   
+     do i=11, Nr-1
+        pi1_f(i) = idrh*((alpha(i+1)*r(i+1)**2*psi1(i+1)/a(i+1) &
+               - alpha(i-1)*r(i-1)**2*psi1(i-1)/a(i-1)) &
+               )/r(i)**2 &
+               - a(i)*alpha(i)*phi1(i)
+   
+        pi2_f(i) = idrh*((alpha(i+1)*r(i+1)**2*psi2(i+1)/a(i+1) &
+               - alpha(i-1)*r(i-1)**2*psi2(i-1)/a(i-1)) &
+               )/r(i)**2 &
+               - a(i)*alpha(i)*phi2(i)
+     end do
+   
 end subroutine
