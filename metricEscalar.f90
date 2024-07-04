@@ -16,86 +16,81 @@ subroutine metricEscalar
 
    !------------------------------------------------
    ! Declaramos variables útiles.
-   integer j
+   integer i
 
-   real(8) rho, geo
-   real(8) aux, aux_p
-   real(8) k1, k2
-   real(8) x, y
+   real(8) idr
+   real(8) aux, ssa, rk1, rhoa, rhoa1, rhoa2, rrhoa
+   real(8) ssalpha, aux1, ssa2, aux2
 
-   !------------------------------------------------
-   ! Solucionaremos usando Runge-Kutta a orden 2 (regla de dos tercios).
+   idr = uno/dr
 
    !------------------------------------------------
-   ! Primero para a.
+   ! Comenzamos solucionando para a.
+   a(1) = uno
    a(2) = uno
 
-   do j=2, Nr-1
+   do i=3, Nr
+      rhoa = medio*( (pi1(i-1)**2  + pi2(i-1)**2 &
+                   + psi1(i-1)**2 + psi2(i-1)**2)/a(i-1)**2 &
+                   + phi1(i-1)**2 + phi2(i-1)**2 )
 
-      rho = (r(j)*medio)*( pi1(j)**2 + pi2(j)**2 + psi1(j)**2 + psi2(j)**2 &
-         + (a(j)**2)*(phi1(j)**2 + phi2(j)**2) )
+      ssa = a(i-1)*( medio*(uno - a(i-1)**2)/r(i-1) &
+            + r(i-1)*a(i-1)**2*rhoa )
 
-      geo = ( a(j)**2 - uno )/( dos*r(j) )
-
-      aux_p = rho - geo
-
-      k1  = a(j)*aux_p
-
-      x   = r(j) + dr*medio
-      y   = a(j) + k1*dr*medio
+      rk1 = a(i-1) + medio*dr*ssa
 
       !------------------------------------------------
-      rho = (x*medio)*( pi1(j+1)**2 + pi2(j+1)**2 + psi1(j+1)**2 + psi2(j+1)**2 &
-         + y**2*(phi1(j+1)**2 + phi2(j+1)**2) )
+      rhoa1 = medio*( (pi1(i-1)**2  + pi2(i-1)**2 &
+                   + psi1(i-1)**2 + psi2(i-1)**2)/rk1**2 &
+                   + phi1(i-1)**2 + phi2(i-1)**2 )
 
-      geo = ( y**2 - uno )/( dos*x )
+      rhoa2 = medio*( (pi1(i)**2  + pi2(i)**2 &
+                   + psi1(i)**2 + psi2(i)**2)/rk1**2 &
+                   + phi1(i)**2 + phi2(i)**2 )
 
-      aux = rho - geo
+      rrhoa = medio* (r(i-1)*rhoa1 + r(i)*rhoa2)
 
-      k2  = y*medio*( aux + aux_p )
+      ssa = rk1* ( (uno - rk1**2)/(r(i-1) + r(i)) + rk1**2*( rrhoa ))
 
-      !------------------------------------------------
-      a(j+1) = a(j) + k2*dr
-
+      a(i) = a(i-1) + dr*(ssa)
    end do
 
-   a(1) = a(2)
 
    !------------------------------------------------
-   ! Ahora solucionamos para alpha.
-   ! Necesitamos solucionar del final hacia el inicio porque
-   ! solo conocemos el valor en la frontera, no en el inicio.
-   alpha(Nr) = uno/a(Nr) !-a(Nr)*(phi1(Nr)/r(Nr) + psi1(Nr))/pi1(Nr)
+   ! Ahora solucionamos para a.
+   alpha(Nr) = uno/a(Nr)
 
-   do j=Nr-1, 2, -1
+   do i=Nr-1, 2, -1
+      rhoa = medio*( (pi1(i+1)**2  + pi2(i+1)**2 &
+                   + psi1(i+1)**2 + psi2(i+1)**2)/a(i+1)**2 &
+                   + phi1(i+1)**2 + phi2(i+1)**2 )
 
-      rho = (r(j+1)*medio)*( pi1(j+1)**2 + pi2(j+1)**2 + psi1(j+1)**2 + psi2(j+1)**2 &
-         - a(j+1)**2*(phi1(j+1)**2 + phi2(j+1)**2) )
+      ssa =  medio*(uno - a(i+1)**2)/r(i+1) &
+            + r(i+1)*a(i+1)**2*rhoa 
 
-      geo = ( a(j+1)**2 - uno )/( dos*r(j+1) )
+      aux1 = ( a(i+1)**2 - uno )/r(i+1) +  ssa  & 
+            - r(i+1)*a(i+1)**2*(phi1(i+1)**2 + phi2(i+1)**2)
 
-      aux_p = geo + rho
+      ssalpha = alpha(i+1)*aux1 
 
-      k1 = alpha(j+1)*aux_p
-
-      x  = r(j+1) - dr*medio
-      y  = alpha(j+1) - k1*dr*medio
-
-      !------------------------------------------------
-      rho = (x*medio)*( pi1(j)**2 + pi2(j)**2 + psi1(j)**2 + psi2(j)**2 &
-         - a(j)**2*(phi1(j)**2 + phi2(j)**2) )
-
-      geo = ( a(j)**2 - uno )/( dos*x )
-
-      aux = geo + rho
-
-      k2  = y*medio*( aux + aux_p )
+      aux = alpha(i+1) - medio*dr*ssalpha
 
       !------------------------------------------------
-      alpha(j) = alpha(j+1) - k2*dr
+      rhoa = medio*( (pi1(i)**2  + pi2(i)**2 &
+                   + psi1(i)**2 + psi2(i)**2)/a(i)**2 &
+                   + phi1(i)**2 + phi2(i)**2 )
 
-   end do
+      ssa2 =  medio*(uno - a(i)**2)/r(i) &
+            + r(i)*a(i)**2*rhoa 
 
-   alpha(1) = alpha(2)
+      aux2 = ( a(i)**2 - uno )/r(i) +  ssa2  & 
+            - r(i)*a(i)**2*(phi1(i)**2 + phi2(i)**2)
+
+      ssalpha = medio*(aux1+aux2)
+  
+      alpha(i) = alpha(i+1) - dr*aux*(ssalpha)
+  end do
+
+  alpha(1) = alpha(2)
 
 end subroutine
