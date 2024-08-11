@@ -26,6 +26,7 @@ subroutine evolveDirac
    allocate( F1(Nr), F2(Nr), G1(Nr), G2(Nr) )
    allocate( F1_f(Nr), F2_f(Nr), G1_f(Nr), G2_f(Nr) )
    allocate( F1_p(Nr), F2_p(Nr), G1_p(Nr), G2_p(Nr) )
+   allocate( deltaDirac(Nr) )
 
    !------------------------------------------------
    ! Llamamos a las condiciones iniciales.
@@ -38,6 +39,12 @@ subroutine evolveDirac
    if (evolveType == 1) then
       return
    end if
+
+   !------------------------------------------------
+   ! Calculamos la perturbación y calculamos el valor de las funciones métricas ya perturbadas.
+   call perturbacionDirac
+   F1 = F1 + deltaDirac
+   call metricDirac
 
    !------------------------------------------------
    ! Imprimimos información inicial a pantalla.

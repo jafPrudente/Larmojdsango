@@ -44,6 +44,12 @@ subroutine evolveEscalar
    end if
 
    !------------------------------------------------
+   ! Calculamos la perturbación y calculamos el valor de las funciones métricas ya perturbadas.
+   call perturbacionEscalar
+   phi1 = phi1 + deltaEscalar
+   call metricEscalar
+
+   !------------------------------------------------
    ! Imprimimos información inicial a pantalla.
    write(*,*) 'Comenzamos a evolucionar...'
    print *,'----------------------------'

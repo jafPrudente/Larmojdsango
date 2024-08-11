@@ -2,7 +2,7 @@ FLAGS = -O2 -ffree-form -w
 
 OBJS = arrays.o saverRT.o saverT.o evolveDirac.o evolveEscalar.o evolveProca.o fuenteDirac.o fuenteEscalar.o \
 		fuenteProca.o initialDirac.o initialEscalar.o initialProca.o main.o vars.o metricEscalar.o \
-		metricDirac.o metricProca.o
+		metricDirac.o metricProca.o perturbacionEscalar.o perturbacionDirac.o
 
 exe : folder link
 
@@ -69,6 +69,12 @@ metricDirac.o : metricDirac.f90
 
 metricProca.o : metricProca.f90
 	@ gfortran $(FLAGS) -c metricProca.f90
+
+perturbacionEscalar.o : perturbacionEscalar.f90
+	@ gfortran $(FLAGS) -c perturbacionEscalar.f90
+
+perturbacionDirac.o : perturbacionDirac.f90
+	@ gfortran $(FLAGS) -c perturbacionDirac.f90
 
 main.o : main.f90
 	@ gfortran $(FLAGS) -c main.f90

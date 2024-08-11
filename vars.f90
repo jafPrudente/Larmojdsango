@@ -16,6 +16,8 @@ module vars
    real(8) rmax, t, tf, courant
    real(8) dr, dt
 
+   real(8) delta, deltaFWHM
+
    real(8) sexto, cuarto, tercio, medio
    real(8) uno, dos, tres, cuatro, cero
 
@@ -75,6 +77,14 @@ contains
       !------------------------------------------------
       ! Parámetro de Courant.
       read(fid,*) courant
+
+      !------------------------------------------------
+      ! Amplitud de la perturbación en relación al máximo.
+      read(fid,*) delta
+
+      !------------------------------------------------
+      ! Anchura de la perturbación en función a la FWHM.
+      read(fid,*) deltaFWHM
 
       !------------------------------------------------
       ! Cerramos las puertas que abrimos.
