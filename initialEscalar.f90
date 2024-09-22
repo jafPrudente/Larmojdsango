@@ -31,9 +31,9 @@ subroutine initialEscalar
 
    !------------------------------------------------
    ! Imprimimos variables de interés.
-   write(*,*) 'w : ', w
-   write(*,*) 'wt: ', w*alpha0
-   write(*,*) 's : ', a(Nr)*alpha(Nr)
+   write(*,*) 'w   --> ', w
+   write(*,*) 'wt  --> ', w*alpha0
+   write(*,*) 's   --> ', a(Nr)*alpha(Nr)
 
    ! Guardamos en un archivo.
    open(ward, file = './' // trim(dirname) // '/sol.dat')

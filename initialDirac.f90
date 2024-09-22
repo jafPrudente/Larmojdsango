@@ -30,9 +30,9 @@ subroutine initialDirac
 
    !------------------------------------------------
    ! Imprimimos variables de interés.
-   write(*,*) 'w : ', w
-   write(*,*) 'wt: ', w*s0
-   write(*,*) 's : ', s(Nr)*s0
+   write(*,*) 'w   --> ', w
+   write(*,*) 'wt  --> ', w*s0
+   write(*,*) 's   --> ', s(Nr)*s0
 
    ! Guardamos en un archivo.
    open(ward, file = './' // trim(dirname) // '/sol.dat')

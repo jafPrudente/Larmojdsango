@@ -45,11 +45,12 @@ subroutine evolveEscalar
 
    !------------------------------------------------
    ! Calculamos la perturbación y calculamos el valor de las funciones métricas ya perturbadas.
-   write(*,*) 'm_i: ', (rmax/dos)*( uno - (uno/a(Nr)**2) )
+   write(*,*) '--------'
+   write(*,*) 'm_i --> ', (rmax/dos)*( uno - (uno/a(Nr)**2) )
    call perturbacionEscalar
    phi1 = phi1 + deltaEscalar
    call metricEscalar
-   write(*,*) 'm_p: ', (rmax/dos)*( uno - (uno/a(Nr)**2) )
+   write(*,*) 'm_p --> ', (rmax/dos)*( uno - (uno/a(Nr)**2) )
 
    !------------------------------------------------
    ! Imprimimos información inicial a pantalla.
