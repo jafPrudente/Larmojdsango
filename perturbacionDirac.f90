@@ -68,7 +68,7 @@ subroutine perturbacionDirac
 
    !================================================
    ! Definimos la perturbación en sí.
-   deltaDirac = amp*dexp( -(r - r0)**2/(dos*sigma**2) )
+   deltaDirac = amp*(r/r0)*dexp( -(r - r0)**2/(dos*sigma**2) )
 
    ! Guardamos la perturbación en un archivo.
    open(indicePerturbador, file = './' // trim(dirname) // '/perturbacion.dat')
