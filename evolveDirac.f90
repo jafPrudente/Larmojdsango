@@ -31,7 +31,16 @@ subroutine evolveDirac
    !------------------------------------------------
    ! Llamamos a las condiciones iniciales.
    call initialDirac
-   adot = cero
+
+   !------------------------------------------------
+   ! Calculamos adot en dadas las condiciones iniciales.
+   Srr = (dos / (r(j)**2 * a(j)) )*( &
+      + F1(j)*(F2(j+1) - F2(j-1)) &
+      - F2(j)*(F1(j+1) - F1(j-1)) &
+      + G1(j)*(G2(j+1) - G2(j-1)) &
+      - G2(j)*(G1(j+1) - G1(j-1)) )*medio/dr
+
+   adot(j) = r(j)*a(j)*alpha(j)*Srr
 
    !------------------------------------------------
    ! Si solo queremos la condición inicial ya la tendríamos

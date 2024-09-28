@@ -34,7 +34,11 @@ subroutine evolveEscalar
    !------------------------------------------------
    ! Llamamos a las condiciones iniciales.
    call initialEscalar
-   adot = cero
+
+   !------------------------------------------------
+   ! Calculamos adot en dadas las condiciones iniciales.
+   Srr = r(j)*alpha(j)*( psi1(j)*pi1(j) + psi2(j)*pi2(j) )
+   adot(j) = -Srr
 
    !------------------------------------------------
    ! Si solo queremos la condición inicial ya la tendríamos
@@ -49,6 +53,11 @@ subroutine evolveEscalar
    write(*,*) 'm_i --> ', (rmax/dos)*( uno - (uno/a(Nr)**2) )
    call perturbacionEscalar
    phi1 = phi1 + deltaEscalar
+
+   do j=2, Nr-1
+      psi1(j) = (phi1(j+1) - phi1(j-1))*medio/dr
+   end do
+
    call metricEscalar
    write(*,*) 'm_p --> ', (rmax/dos)*( uno - (uno/a(Nr)**2) )
 
