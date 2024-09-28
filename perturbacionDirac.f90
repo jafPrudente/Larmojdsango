@@ -74,7 +74,7 @@ subroutine perturbacionDirac
    open(indicePerturbador, file = './' // trim(dirname) // '/perturbacion.dat')
 
    do j=2, Nr, savedataR
-      write(indicePerturbador, "(3(F11.8,','))") r(j), deltaDirac(j), F1(j) + deltaDirac(j)
+      write(indicePerturbador, "(3ES16.8)") r(j), deltaDirac(j), F1(j) + deltaDirac(j)
    end do
 
    close(indicePerturbador)

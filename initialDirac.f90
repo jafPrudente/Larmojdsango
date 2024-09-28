@@ -38,7 +38,7 @@ subroutine initialDirac
    open(ward, file = './' // trim(dirname) // '/sol.dat')
 
    do j=2, Nr, savedataR
-      write(ward, "(5(F11.8,','))") r(j), m(j), s(j), F(j), G(j)
+      write(ward, "(5ES16.8)") r(j), m(j), s(j), F(j), G(j)
    end do
 
    close(ward)

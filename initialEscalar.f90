@@ -39,7 +39,7 @@ subroutine initialEscalar
    open(ward, file = './' // trim(dirname) // '/sol.dat')
 
    do j=2, Nr, savedataR
-      write(ward, "(4(F11.8,','))") r(j), a(j), alpha(j), phi(j)
+      write(ward, "(4ES16.8)") r(j), a(j), alpha(j), phi(j)
    end do
 
    close(ward)
