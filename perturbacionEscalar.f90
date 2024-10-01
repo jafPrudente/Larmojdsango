@@ -20,8 +20,8 @@ subroutine perturbacionEscalar
    real(8) amp, sigma, r0
 
    real(8) medio_maximo, FWHM
-   integer j, indice_der, indice_izq
-   logical encontrado_der, encontrado_izq
+   integer j, indice_der
+   logical encontrado_der
 
    !================================================
    ! Definimos la amplitud de la perturbación.
