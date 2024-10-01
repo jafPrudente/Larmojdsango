@@ -17,7 +17,6 @@ subroutine evolveEscalar
    ! Definimos variables importantes.
    integer j, k, n
 
-   real(8) alpha0
    real(8) dtw, dif
    real(8) Srr_p, Srr
 
@@ -58,9 +57,6 @@ subroutine evolveEscalar
    do j=2, Nr-1
       psi1(j) = (phi1(j+1) - phi1(j-1))*medio/dr
    end do
-
-   alpha0 = uno/( a(Nr)*alpha(Nr) )
-   pi2 = -(w*alpha0)*phi1*( a/alpha )
 
    call metricEscalar
    write(*,*) 'm_p --> ', (rmax/dos)*( uno - (uno/a(Nr)**2) )
