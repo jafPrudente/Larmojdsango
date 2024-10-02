@@ -11,10 +11,13 @@ module vars
    integer Nt, Nr
    integer lineasT, puntosR
    integer savedataT, savedataR
+   integer indMax
 
    real(8) campo0, w
    real(8) rmax, t, tf, courant
    real(8) dr, dt
+
+   real(8) campoMax
 
    real(8) delta, deltaFWHM
 
@@ -116,6 +119,9 @@ contains
 
       dr = (rmax)/dble(Nr)
       dt = courant*dr
+
+      indMax = 0
+      campoMax = cero
 
       !------------------------------------------------
       ! Creamos la carpeta que guardará la información.

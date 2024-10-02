@@ -29,8 +29,8 @@ subroutine wardaditoStatic
    else if( matterType == 2 ) then
       !------------------------------------------------
       ! Para Dirac.
-      write(13,"(2ES16.8)") t, F1(586)
-      write(78,"(2ES16.8)") t, 0.11704489*dcos(0.924*t + 0.15)
+      write(13,"(2ES16.8)") t, F1(indMax)
+      write(78,"(2ES16.8)") t, F(indMax)*dcos(w*t/s(Nr))
       write(14,"(2ES16.8)") t, maxval( F2 )
       write(23,"(2ES16.8)") t, maxval( G1 )
       write(24,"(2ES16.8)") t, maxval( G2 )

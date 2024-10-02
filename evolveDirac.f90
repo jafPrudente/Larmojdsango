@@ -31,6 +31,7 @@ subroutine evolveDirac
    !------------------------------------------------
    ! Llamamos a las condiciones iniciales.
    call initialDirac
+   indMax = maxloc(F1, dim=1)
 
    !------------------------------------------------
    ! Calculamos adot en dadas las condiciones iniciales.
