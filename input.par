@@ -3,10 +3,10 @@
 0.04          ! campo0, parámetro inicial del campo de la estrella
 1.03860266761 ! w, ansatz para la frecuencia
 50            ! rmax, límite superior espacial
-10000         ! tf, tiempo de integración final
+100           ! tf, tiempo de integración final
 0.01          ! dr, tamaño de paso radial
-500           ! lineasT, cuántas líneas temporales se guardarán
-500           ! puntosR, cuántos puntos espaciales tendrán los datos guardados
+250           ! lineasT, cuántas líneas temporales se guardarán
+250           ! puntosR, cuántos puntos espaciales tendrán los datos guardados
 0.5           ! courant, parámetro de Courant
 +0.00         ! delta, el tamaño de la amplitud de la perturbación
 0.1           ! deltaFWHM, el tamaño de la anchura de la perturbación

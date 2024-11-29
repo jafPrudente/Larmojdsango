@@ -17,7 +17,7 @@ subroutine initialDirac
    ! Declaramos variables útiles.
    integer j
    integer ward
-   real(8) s0
+   real(8) alpha0
 
    !------------------------------------------------
    ! Apicamos el shooting.
@@ -26,19 +26,20 @@ subroutine initialDirac
 
    !------------------------------------------------
    ! Regresamos el reescalamiento.
-   s0 = 1/s(Nr)
+   alpha0 = uno/( a(Nr)*alpha(Nr) )
+   alpha  = alpha0*alpha
 
    !------------------------------------------------
    ! Imprimimos variables de interés.
    write(*,*) 'w   --> ', w
-   write(*,*) 'wt  --> ', w*s0
-   write(*,*) 's   --> ', s(Nr)*s0
+   write(*,*) 'wt  --> ', w*alpha0
+   write(*,*) 's   --> ', a(Nr)*alpha(Nr)
 
    ! Guardamos en un archivo.
    open(ward, file = './' // trim(dirname) // '/sol.dat')
 
    do j=2, Nr, savedataR
-      write(ward, "(5ES16.8)") r(j), m(j), s(j), F(j), G(j)
+      write(ward, "(5ES16.8)") r(j), a(j), alpha(j), F(j), G(j)
    end do
 
    close(ward)
@@ -51,43 +52,32 @@ subroutine initialDirac
       G2(j) = G(j)
    end do
 
-   !------------------------------------------------
-   ! Encontremos los coeficientes métricos.
-   do j=2, Nr
-      a(j)     = uno/dsqrt(uno - (dos*m(j)/r(j)) )
-      alpha(j) = s0*s(j)*dsqrt(uno - (dos*m(j)/r(j)) )
-   end do
-
-   a(1)     = a(2)
-   alpha(1) = alpha(2)
-
 end subroutine initialDirac
 
 !------------------------------------------------
 ! Definimos una subrutina para las derivadas.
 
-subroutine derivadasDirac(w, r, m, s, F, G, dm, ds, dF, dG)
+subroutine derivadasDirac(w, r, a, alpha, F, G, da, dalpha, dF, dG)
 
    implicit none
 
    real(8) uno, dos
    real(8) w, r
-   real(8) ene, rho, srr, zet
-   real(8) m, s, F, G
-   real(8) dm, ds, dF, dG
+   real(8) rho, srr, zet
+   real(8) a, alpha, F, G
+   real(8) da, dalpha, dF, dG
 
    uno    = 1.0D0
    dos    = 2.0D0
 
-   ene = uno - (dos*m)/(r)
-   rho = ( (dos*w)/(r**2 * s) )*(F**2 + G**2)
-   srr = ( dos*ene/r**2)*( w*(F**2 + G**2)/(ene*s) - (dos*F*G)/(r*dsqrt(ene)) - (F**2 - G**2)/dsqrt(ene) )
-   zet = ( r/ene)*(rho - srr) - (dos*m)/(r**2 * ene)
+   rho = ( (dos*w)/(r**2 * a * alpha) )*(F**2 + G**2)
+   srr = ( dos/(r**2 * a) )*( (w/alpha)*(F**2 + G**2) - (dos*F*G)/r - F**2 + G**2 )
+   zet = ( r*a**2 )*(rho - srr) - (a**2 - uno)/r
 
-   dm = r**2 * rho
-   ds = (s*r/ene)*(rho + srr)
-   dF = F*( zet/dos + uno/(r*dsqrt(ene)) ) - G*(uno/dsqrt(ene) + w/(ene*s))
-   dG = G*( zet/dos - uno/(r*dsqrt(ene)) ) - F*(uno/dsqrt(ene) - w/(ene*s))
+   da = r*(a**3)*rho - a*(a**2 - uno)/(dos*r)
+   dalpha = r*(a**2)*alpha*srr + alpha*(a**2 - uno)/(dos*r)
+   dF = F*( zet/dos + a/r ) - G*( a + w*a/alpha )
+   dG = G*( zet/dos - a/r ) - F*( a - w*a/alpha )
 
 end subroutine derivadasDirac
 
@@ -109,27 +99,27 @@ subroutine solucionadorDirac
    real(8) F0
 
    ! Declaramos variables del método.
-   real(8) k1m, k1s, k1F, k1G
-   real(8) k2m, k2s, k2F, k2G
-   real(8) k3m, k3s, k3F, k3G
-   real(8) k4m, k4s, k4F, k4G
+   real(8) k1a, k1alpha, k1F, k1G
+   real(8) k2a, k2alpha, k2F, k2G
+   real(8) k3a, k3alpha, k3F, k3G
+   real(8) k4a, k4alpha, k4F, k4G
 
    ! Declaramos variables que guarden a las funciones derivadas.
-   real(8) dm, ds, dF, dG
+   real(8) da, dalpha, dF, dG
 
    !------------------------------------------------
    ! Definimos las condiciones iniciales (con simetrías).
    F0   = campo0
 
    r(2) = dr
-   m(2) = (dos*tercio)*(F0**2)*(dr**3)*w
-   s(2) = uno + tercio*(F0**2)*(cuatro*w - uno)*(dr**2)
+   a(2) = uno
+   alpha(2) = uno
    F(2) = F0*dr
    G(2) = tercio*F0*(w - uno)*(dr**2)
 
    r(1) = -r(2)
-   m(1) = -m(2)
-   s(1) =  s(2)
+   a(1) = a(2)
+   alpha(1) = alpha(2)
    F(1) = -F(2)
    G(1) =  G(2)
 
@@ -138,45 +128,45 @@ subroutine solucionadorDirac
    do j=2, Nr-1
 
       !------------------------------------------------
-      call derivadasDirac(w, r(j), m(j), s(j), F(j), G(j), &
-         dm, ds, dF, dG)
+      call derivadasDirac(w, r(j), a(j), alpha(j), F(j), G(j), &
+         da, dalpha, dF, dG)
 
-      k1m = dm
-      k1s = ds
+      k1a = da
+      k1alpha = dalpha
       k1F = dF
       k1G = dG
 
       !------------------------------------------------
-      call derivadasDirac(w, r(j) + medio*dr, m(j) + medio*k1m*dr, s(j) + medio*k1s*dr, F(j) + medio*k1F*dr, G(j) + medio*k1G*dr, &
-         dm, ds, dF, dG)
+      call derivadasDirac(w, r(j) + medio*dr, a(j) + medio*k1a*dr, alpha(j) + medio*k1alpha*dr, F(j) + medio*k1F*dr, G(j) + medio*k1G*dr, &
+         da, dalpha, dF, dG)
 
-      k2m = dm
-      k2s = ds
+      k2a = da
+      k2alpha = dalpha
       k2F = dF
       k2G = dG
 
       !------------------------------------------------
-      call derivadasDirac(w, r(j) + medio*dr, m(j) + medio*k2m*dr, s(j) + medio*k2s*dr, F(j) + medio*k2F*dr, G(j) + medio*k2G*dr, &
-         dm, ds, dF, dG)
+      call derivadasDirac(w, r(j) + medio*dr, a(j) + medio*k2a*dr, alpha(j) + medio*k2alpha*dr, F(j) + medio*k2F*dr, G(j) + medio*k2G*dr, &
+         da, dalpha, dF, dG)
 
-      k3m = dm
-      k3s = ds
+      k3a = da
+      k3alpha = dalpha
       k3F = dF
       k3G = dG
 
       !------------------------------------------------
-      call derivadasDirac(w, r(j) + dr, m(j) + k3m*dr, s(j) + k3s*dr, F(j) + k3F*dr, G(j) + k3G*dr, &
-         dm, ds, dF, dG)
+      call derivadasDirac(w, r(j) + dr, a(j) + k3a*dr, alpha(j) + k3alpha*dr, F(j) + k3F*dr, G(j) + k3G*dr, &
+         da, dalpha, dF, dG)
 
-      k4m = dm
-      k4s = ds
+      k4a = da
+      k4alpha = dalpha
       k4F = dF
       k4G = dG
 
       !------------------------------------------------
       r(j+1) = r(j) + dr
-      m(j+1) = m(j) + (k1m + dos*k2m + dos*k3m + k4m)*(dr*sexto)
-      s(j+1) = s(j) + (k1s + dos*k2s + dos*k3s + k4s)*(dr*sexto)
+      a(j+1) = a(j) + (k1a + dos*k2a + dos*k3a + k4a)*(dr*sexto)
+      alpha(j+1) = alpha(j) + (k1alpha + dos*k2alpha + dos*k3alpha + k4alpha)*(dr*sexto)
       F(j+1) = F(j) + (k1F + dos*k2F + dos*k3F + k4F)*(dr*sexto)
       G(j+1) = G(j) + (k1G + dos*k2G + dos*k3G + k4G)*(dr*sexto)
 
