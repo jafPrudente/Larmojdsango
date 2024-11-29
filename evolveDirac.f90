@@ -54,9 +54,13 @@ subroutine evolveDirac
    ! Calculamos la perturbación y calculamos el valor de las funciones métricas ya perturbadas.
    write(*,*) '--------'
    write(*,*) 'm_i --> ', (rmax/dos)*( uno - (uno/a(Nr)**2) )
-   call perturbacionDirac
-   F1 = F1 + deltaDirac
-   call metricDirac
+
+   if ( delta /= 0 ) then
+      call perturbacionDirac
+      F1 = F1 + deltaDirac
+      call metricDirac
+   end if
+
    write(*,*) 'm_p --> ', (rmax/dos)*( uno - (uno/a(Nr)**2) )
 
    !------------------------------------------------
@@ -114,7 +118,7 @@ subroutine evolveDirac
       t = t + dt
 
       !------------------------------------------------
-      ! Guardamos información previa.
+      ! Guardamos informaci��n previa.
       do j = 1, Nr
          F1_p(j) = F1(j)
          F2_p(j) = F2(j)
