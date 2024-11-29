@@ -202,7 +202,7 @@ subroutine shootingProca
    dw = 0.000001
 
    ! Definimos la tolerancia.
-   tolerancia = dr**4
+   tolerancia = dr**3
 
    ! Iniciamos el contador en ceros.
    counter = 0

@@ -190,10 +190,10 @@ subroutine shootingKG
    real(8) dw, tolerancia
 
    ! Definimos la primer diferencial de 'w'.
-   dw = 0.000000001
+   dw = 0.000001
 
    ! Definimos la tolerancia.
-   tolerancia = dr**2
+   tolerancia = dr**3
 
    ! Iniciamos el contador en ceros.
    counter = 0
